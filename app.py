@@ -2,12 +2,13 @@ from flask_cors import CORS
 from flask_restful import Api
 from PIL import Image,ImageOps
 import io
-from flask import request,send_file,make_response,request,Flask,jsonify
+from flask import request,send_file,make_response,request,Flask,jsonify,url_for
 from flask_restful import Resource
 import numpy as np
 from conversion import conversion
 from base64 import encodebytes
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -29,11 +30,16 @@ class image_return(Resource):
         img_grey = np.array(img_grey)
 
         img_res = conversion(img_rbg,img_grey)
+        # path = 'D:\Source codes\AR wardrobe\Backend\static\saved.png'
+        rel_path = "\static\saved.png"
+        abs_path = os.getcwd()
+        
+        path = abs_path+rel_path
+        img_res.save(path,"png")
+        # img_byte_arr = io.BytesIO()
+        # img_res.save(img_byte_arr, format='png')
 
-        img_byte_arr = io.BytesIO()
-        img_res.save(img_byte_arr, format='png')
-
-        encoded_img =  encodebytes(img_byte_arr.getvalue()).decode('ascii')
+        # encoded_img =  encodebytes(img_byte_arr.getvalue()).decode('ascii')
         # return send_file(
         #     img_byte_arr,
         #     mimetype='image/jpeg',
@@ -45,7 +51,10 @@ class image_return(Resource):
         # response.headers.set(
         #     'Content-Disposition','attachment',filename='image.png'
         # )
-        response =  { 'Status' : 'Success', 'message': "Ithenkilum nadakkuvo" , 'ImageBytes': encoded_img}
+        url = url_for('static',filename ="saved.png")
+        path_link = "https://arwardrobe.herokuapp.com/"
+        url = path_link + url
+        response =  {  'url': url} 
         return jsonify(response)
 
 
