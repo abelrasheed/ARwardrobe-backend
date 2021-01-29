@@ -31,11 +31,7 @@ class image_return(Resource):
 
         img_res = conversion(img_rbg,img_grey)
         # path = 'D:\Source codes\AR wardrobe\Backend\static\saved.png'
-        rel_path = "\static\saved.png"
-        abs_path = os.getcwd()
-        
-        path = abs_path+rel_path
-        img_res.save(path,"png")
+        img_res.save('saved.png','png')
         # img_byte_arr = io.BytesIO()
         # img_res.save(img_byte_arr, format='png')
 
@@ -51,10 +47,8 @@ class image_return(Resource):
         # response.headers.set(
         #     'Content-Disposition','attachment',filename='image.png'
         # )
-        url = url_for('static',filename ="saved.png")
-        path_link = "https://arwardrobe.herokuapp.com/"
-        url = path_link + url
-        response =  {  'url': url} 
+        
+        response =  {  'url': 'url'} 
         return jsonify(response)
 
 
